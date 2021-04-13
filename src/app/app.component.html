@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CSV</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <input style="padding: 2%" type="file" class="form-control-file" multiple (change)="getCsvFile($event)"/>
+  
+  <table *ngIf="form.data.records.length > 0">
+    <tr>
+      <td style="width: 50%; padding-right: 2%;">
+        <select class="form-control" [(ngModel)]="form.data.searchCriteria">
+          <option *ngFor="let selection of form.data.headerMap | keyvalue: disableSort;">{{selection.key}}</option>
+        </select>
+      </td>
+      <td style="padding-right: 2%;">
+        <input class="form-control" type="search" placeholder="Search" [(ngModel)]="form.ui.searchInput" (change)="searchByCriteria($event)"/> 
+      </td>
+      <td>
+        <button type="button" class="btn btn-outline-dark" (click)="reset()">Reset</button>
+      </td>
+    </tr>
+  </table>
+
+  <app-data-details [data]="form.data.selectedRecord"></app-data-details>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th [ngClass]="{'red-font-color' : col.value === false, 'green-font-color' : col.value === true }" class="disable-select" *ngFor="let col of form.data.headerMap | keyvalue: disableSort;" (click)="sortBy(col.key)">{{col.key | titlecase}}</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="form.data.searchedRecords.length < 1">
+      <tr class="clickable-row" *ngFor="let record of form.data.records;" (click)="showDetails(record.id)">
+        <td> <span>{{record.id}}</span></td>
+        <td> <span>{{record.person}}</span> </td>
+        <td> <span>{{record.tel}}</span> </td>
+        <td> <span>{{record.address}}</span> </td>
+        <td> <span>{{record.office}}</span> </td>
+        <td> <span>{{record.task}}</span> </td>
+        <td> <span>{{record.date}}</span> </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="form.data.searchedRecords.length > 0">
+      <tr class="clickable-row" *ngFor="let record of form.data.searchedRecords;" (click)="showDetails(record.id)">
+        <td> <span>{{record.id}}</span></td>
+        <td> <span>{{record.person}}</span> </td>
+        <td> <span>{{record.tel}}</span> </td>
+        <td> <span>{{record.address}}</span> </td>
+        <td> <span>{{record.office}}</span> </td>
+        <td> <span>{{record.task}}</span> </td>
+        <td> <span>{{record.date}}</span> </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>
+
+
+
+
